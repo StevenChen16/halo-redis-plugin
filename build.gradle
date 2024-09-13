@@ -13,6 +13,7 @@ repositories {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/releases' }
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://repo.spring.io/milestone' }
+    maven { url "https://repo.spring.io/snapshot" }
 }
 
 dependencies {
@@ -24,7 +25,7 @@ dependencies {
     
     // Redis 相关的依赖
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'io.lettuce.core:lettuce-core:6.1.5'
+    implementation 'io.lettuce.core:lettuce-core:6.2.4'
 
     // 测试相关的依赖
     testImplementation 'run.halo.app:api'
