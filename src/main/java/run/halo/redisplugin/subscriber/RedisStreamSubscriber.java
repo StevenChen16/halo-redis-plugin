@@ -80,7 +80,6 @@ public class RedisStreamSubscriber implements InitializingBean {
     private void updatePostCache(Long postId) {
         // 通过 REST API 获取帖子信息并更新缓存
         String url = "http://localhost:8090/api/posts/" + postId;
-        // 请根据实际情况设置 URL 和端口
         Map<String, Object> post = restTemplate.getForObject(url, Map.class);
         if (post != null) {
             // 更新缓存逻辑
@@ -90,7 +89,6 @@ public class RedisStreamSubscriber implements InitializingBean {
     private void updateCommentCache(Long commentId) {
         // 通过 REST API 获取评论信息并更新缓存
         String url = "http://localhost:8090/api/comments/" + commentId;
-        // 请根据实际情况设置 URL 和端口
         Map<String, Object> comment = restTemplate.getForObject(url, Map.class);
         if (comment != null) {
             // 更新缓存逻辑

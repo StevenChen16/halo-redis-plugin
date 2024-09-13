@@ -1,16 +1,17 @@
 package com.stevenchen.redisplugin.listener;
 
-import org.springframework.context.ApplicationListener;
-import org.springframework.stereotype.Component;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import run.halo.app.plugin.event.PluginEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+import run.halo.app.event.comment.CommentNewEvent;
+import run.halo.app.event.post.PostCreatedEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class HaloEventListener implements ApplicationListener<PluginEvent> {
+public class PostCreatedEventListener implements ApplicationListener<PostCreatedEvent> {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -18,13 +19,30 @@ public class HaloEventListener implements ApplicationListener<PluginEvent> {
     private final String STREAM_KEY = "halo-stream";
 
     @Override
-    public void onApplicationEvent(PluginEvent event) {
-        // 根据事件类型处理
-        if ("PostCreateEvent".equals(event.getType())) {
-            publishMessage("POST_CREATED", (Long) event.getSource());
-        } else if ("CommentNewEvent".equals(event.getType())) {
-            publishMessage("COMMENT_ADDED", (Long) event.getSource());
-        }
+    public void onApplicationEvent(PostCreatedEvent event) {
+        publishMessage("POST_CREATED", event.getPostId());
+    }
+
+    private void publishMessage(String action, Long id) {
+        Map<String, Object> message = new HashMap<>();
+        message.put("action", action);
+        message.put("id", id.toString());
+
+        redisTemplate.opsForStream().add(STREAM_KEY, message);
+    }
+}
+
+@Component
+public class CommentNewEventListener implements ApplicationListener<CommentNewEvent> {
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    private final String STREAM_KEY = "halo-stream";
+
+    @Override
+    public void onApplicationEvent(CommentNewEvent event) {
+        publishMessage("COMMENT_ADDED", event.getCommentId());
     }
 
     private void publishMessage(String action, Long id) {
