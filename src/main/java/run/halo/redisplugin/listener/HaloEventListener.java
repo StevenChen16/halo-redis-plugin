@@ -1,13 +1,15 @@
+package com.stevenchen.redisplugin.listener;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import run.halo.app.event.comment.CommentNewEvent;
-import run.halo.app.event.post.PostCreatedEvent;
+
+import run.halo.app.plugin.event.comment.CommentNewEvent;
+import run.halo.app.plugin.event.post.PostCreateEvent;
 
 import java.util.HashMap;
 import java.util.Map;
-
 
 @Component
 public class HaloEventListener {
@@ -26,7 +28,7 @@ public class HaloEventListener {
     }
 
     @EventListener
-    public void onPostCreated(PostCreatedEvent event) {
+    public void onPostCreated(PostCreateEvent event) {
         publishMessage("POST_CREATED", event.getPost().getId());
     }
 

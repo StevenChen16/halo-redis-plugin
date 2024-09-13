@@ -1,13 +1,16 @@
+package com.stevenchen.redisplugin.subscriber;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import run.halo.app.cache.CacheStore;
-import run.halo.app.model.entity.Post;
-import run.halo.app.model.entity.Comment;
-import run.halo.app.service.base.PostService;
-import run.halo.app.service.base.CommentService;
+
+import run.halo.app.plugin.cache.CacheStore;
+import run.halo.app.plugin.model.entity.Post;
+import run.halo.app.plugin.model.entity.Comment;
+import run.halo.app.plugin.service.PostService;
+import run.halo.app.plugin.service.CommentService;
 
 import java.time.Duration;
 import java.util.List;
