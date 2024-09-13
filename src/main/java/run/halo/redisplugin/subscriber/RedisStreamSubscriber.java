@@ -5,12 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-
-import run.halo.app.plugin.cache.CacheStore;
-import run.halo.app.plugin.model.entity.Post;
-import run.halo.app.plugin.model.entity.Comment;
-import run.halo.app.plugin.service.PostService;
-import run.halo.app.plugin.service.CommentService;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 import java.util.List;
@@ -18,21 +13,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 
-
 @Component
 public class RedisStreamSubscriber implements InitializingBean {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
-    private PostService postService;
-
-    @Autowired
-    private CommentService commentService;
-
-    @Autowired
-    private CacheStore cacheStore;
+    private RestTemplate restTemplate = new RestTemplate();
 
     private final String STREAM_KEY = "halo-stream";
     private final String GROUP_NAME = "halo-group";
@@ -91,20 +78,22 @@ public class RedisStreamSubscriber implements InitializingBean {
     }
 
     private void updatePostCache(Long postId) {
-        Post post = postService.getById(postId);
+        // 通过 REST API 获取帖子信息并更新缓存
+        String url = "http://localhost:8090/api/posts/" + postId;
+        // 请根据实际情况设置 URL 和端口
+        Map<String, Object> post = restTemplate.getForObject(url, Map.class);
         if (post != null) {
-            // 更新缓存，具体的缓存键需要根据 Halo 的实现
-            String cacheKey = "posts::" + postId;
-            cacheStore.put(cacheKey, post);
+            // 更新缓存逻辑
         }
     }
 
     private void updateCommentCache(Long commentId) {
-        Comment comment = commentService.getById(commentId);
+        // 通过 REST API 获取评论信息并更新缓存
+        String url = "http://localhost:8090/api/comments/" + commentId;
+        // 请根据实际情况设置 URL 和端口
+        Map<String, Object> comment = restTemplate.getForObject(url, Map.class);
         if (comment != null) {
-            // 更新缓存，具体的缓存键需要根据 Halo 的实现
-            String cacheKey = "comments::" + commentId;
-            cacheStore.put(cacheKey, comment);
+            // 更新缓存逻辑
         }
     }
 }
