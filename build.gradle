@@ -13,19 +13,15 @@ repositories {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/releases' }
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
     // maven { url 'https://repo1.maven.org/maven2/io/lettuce/lettuce-core/6.2.4.RELEASE/'}
-    // maven { url 'https://repo.spring.io/milestone' }
     maven { url "https://repo.spring.io/snapshot" }
 }
 
 dependencies {
     // 使用 Halo 的插件平台
-    implementation platform('run.halo.tools.platform:plugin:2.11.0-SNAPSHOT')
+    // implementation platform('run.halo.tools.platform:plugin:2.11.0-SNAPSHOT')
 
     // Halo 核心 API，提供服务和实体
     compileOnly 'run.halo.app:api'
-    compileOnly 'run.halo.app:core'      // 核心服务
-    compileOnly 'run.halo.app:model'     // 数据模型和实体类
-    compileOnly 'run.halo.app:cache'     // 缓存机制
 
     // Redis 相关的依赖
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
