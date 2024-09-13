@@ -1,5 +1,3 @@
-package com.stevenchen.redisplugin.listener;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -9,6 +7,7 @@ import run.halo.app.event.post.PostCreatedEvent;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 @Component
 public class HaloEventListener {

@@ -16,12 +16,21 @@ repositories {
 }
 
 dependencies {
+    // 使用 Halo 的插件平台
     implementation platform('run.halo.tools.platform:plugin:2.11.0-SNAPSHOT')
-    compileOnly 'run.halo.app:api'
 
+    // Halo API，提供核心功能
+    compileOnly 'run.halo.app:api'
+    
+    // Redis 相关的依赖
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'io.lettuce.core:lettuce-core:6.1.5'
+
+    // 测试相关的依赖
     testImplementation 'run.halo.app:api'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
 
 test {
     useJUnitPlatform()
