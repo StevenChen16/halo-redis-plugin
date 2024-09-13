@@ -24,9 +24,9 @@ dependencies {
     // Halo API，提供核心功能
     compileOnly 'run.halo.app:api'
     
-    // Redis 相关的依赖
+    // Redis 相关的依赖，使用正确的 lettuce-core 版本
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'io.lettuce.core:lettuce-core:6.2.7.RELEASE'
+    implementation 'io.lettuce.core:lettuce-core:6.3.2.RELEASE'
 
     // 测试相关的依赖
     testImplementation 'run.halo.app:api'
