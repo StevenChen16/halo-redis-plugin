@@ -1,5 +1,3 @@
-package com.stevenchen.redisplugin.subscriber;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.stream.*;
@@ -8,14 +6,15 @@ import org.springframework.stereotype.Component;
 import run.halo.app.cache.CacheStore;
 import run.halo.app.model.entity.Post;
 import run.halo.app.model.entity.Comment;
-import run.halo.app.service.PostService;
-import run.halo.app.service.CommentService;
+import run.halo.app.service.base.PostService;
+import run.halo.app.service.base.CommentService;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executors;
+
 
 @Component
 public class RedisStreamSubscriber implements InitializingBean {
