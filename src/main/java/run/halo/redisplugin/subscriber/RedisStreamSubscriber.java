@@ -2,10 +2,12 @@ package com.stevenchen.redisplugin.subscriber;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import run.halo.app.core.extension.ReactiveExtensionClient;
+import run.halo.app.core.extension.content.Post;
+import run.halo.app.core.extension.content.Comment;
 
 import java.time.Duration;
 import java.util.List;
@@ -19,7 +21,8 @@ public class RedisStreamSubscriber implements InitializingBean {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    private RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    private ReactiveExtensionClient extensionClient;
 
     private final String STREAM_KEY = "halo-stream";
     private final String GROUP_NAME = "halo-group";
@@ -78,20 +81,14 @@ public class RedisStreamSubscriber implements InitializingBean {
     }
 
     private void updatePostCache(Long postId) {
-        // 通过 REST API 获取帖子信息并更新缓存
-        String url = "http://localhost:8090/api/posts/" + postId;
-        Map<String, Object> post = restTemplate.getForObject(url, Map.class);
-        if (post != null) {
+        extensionClient.fetchPostById(postId).subscribe(post -> {
             // 更新缓存逻辑
-        }
+        });
     }
 
     private void updateCommentCache(Long commentId) {
-        // 通过 REST API 获取评论信息并更新缓存
-        String url = "http://localhost:8090/api/comments/" + commentId;
-        Map<String, Object> comment = restTemplate.getForObject(url, Map.class);
-        if (comment != null) {
+        extensionClient.fetchCommentById(commentId).subscribe(comment -> {
             // 更新缓存逻辑
-        }
+        });
     }
 }
