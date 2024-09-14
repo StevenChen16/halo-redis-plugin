@@ -38,9 +38,13 @@ public class HaloEventListener implements ApplicationListener<ApplicationEvent> 
         Map<String, Object> message = new HashMap<>();
         message.put("action", action);
         message.put("id", id.toString());
-
+    
+        // 添加调试日志，确保方法被调用
+        System.out.println("Publishing message to Redis: action=" + action + ", id=" + id);
+    
         redisTemplate.opsForStream().add(STREAM_KEY, message);
     }
+    
 
     // 从事件中获取 postId，具体实现依赖于事件类的结构
     private Long getPostIdFromEvent(ApplicationEvent event) {
