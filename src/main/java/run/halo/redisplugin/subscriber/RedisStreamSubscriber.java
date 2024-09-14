@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.RedisTemplate;
-import run.halo.app.core.extension.ReactiveExtensionClient;
-import run.halo.app.core.extension.content.Post;
-import run.halo.app.core.extension.content.Comment;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 import java.util.List;
@@ -21,8 +19,7 @@ public class RedisStreamSubscriber implements InitializingBean {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
-    private ReactiveExtensionClient extensionClient;
+    private RestTemplate restTemplate = new RestTemplate();
 
     private final String STREAM_KEY = "halo-stream";
     private final String GROUP_NAME = "halo-group";
@@ -81,14 +78,20 @@ public class RedisStreamSubscriber implements InitializingBean {
     }
 
     private void updatePostCache(Long postId) {
-        extensionClient.fetchPostById(postId).subscribe(post -> {
+        // 使用 REST API 获取文章信息
+        String url = "http://localhost:8090/api/posts/" + postId;
+        Map<String, Object> post = restTemplate.getForObject(url, Map.class);
+        if (post != null) {
             // 更新缓存逻辑
-        });
+        }
     }
 
     private void updateCommentCache(Long commentId) {
-        extensionClient.fetchCommentById(commentId).subscribe(comment -> {
+        // 使用 REST API 获取评论信息
+        String url = "http://localhost:8090/api/comments/" + commentId;
+        Map<String, Object> comment = restTemplate.getForObject(url, Map.class);
+        if (comment != null) {
             // 更新缓存逻辑
-        });
+        }
     }
 }

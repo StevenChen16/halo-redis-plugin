@@ -4,11 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.data.redis.core.RedisTemplate;
-
-import run.halo.app.core.extension.content.Post;
-import run.halo.app.core.extension.content.Comment;
-import run.halo.app.core.extension.event.PostEvent;
-import run.halo.app.core.extension.event.CommentEvent;
+import run.halo.app.event.comment.CommentNewEvent;  // 使用通用事件类
+import run.halo.app.event.post.PostCreatedEvent;   // 使用通用事件类
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,19 +19,13 @@ public class HaloEventListener {
     private final String STREAM_KEY = "halo-stream";
 
     @EventListener
-    public void onPostEvent(PostEvent event) {
-        if (event.getType() == PostEvent.Type.CREATED) {
-            Post post = event.getPost();
-            publishMessage("POST_CREATED", post.getId());
-        }
+    public void onPostCreated(PostCreatedEvent event) {
+        publishMessage("POST_CREATED", event.getPostId());  // 使用现有方法获取文章ID
     }
 
     @EventListener
-    public void onCommentEvent(CommentEvent event) {
-        if (event.getType() == CommentEvent.Type.CREATED) {
-            Comment comment = event.getComment();
-            publishMessage("COMMENT_ADDED", comment.getId());
-        }
+    public void onCommentAdded(CommentNewEvent event) {
+        publishMessage("COMMENT_ADDED", event.getCommentId());  // 使用现有方法获取评论ID
     }
 
     private void publishMessage(String action, Long id) {
