@@ -1,11 +1,10 @@
 package com.stevenchen.redisplugin.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.context.ApplicationEvent;  // 使用通用事件类
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,16 +19,18 @@ public class HaloEventListener implements ApplicationListener<ApplicationEvent> 
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
-        // 打印事件类型，帮助确认触发的事件
-        System.out.println("Received event: " + event.getClass().getSimpleName());
+        // 打印事件的类名，便于调试确认事件类型
+        System.out.println("Received event: " + event.getClass().getName());
 
-        // 检查事件的类型，并根据不同的事件类型执行操作
-        if (event instanceof PostCreatedEvent) {
-            PostCreatedEvent postEvent = (PostCreatedEvent) event;
-            publishMessage("POST_CREATED", postEvent.getPostId());
-        } else if (event instanceof CommentNewEvent) {
-            CommentNewEvent commentEvent = (CommentNewEvent) event;
-            publishMessage("COMMENT_ADDED", commentEvent.getCommentId());
+        // 根据事件的实际类型进行处理
+        if (event.getClass().getSimpleName().equals("PostCreatedEvent")) {
+            // 假设事件有 getPostId() 方法
+            Long postId = getPostIdFromEvent(event);
+            publishMessage("POST_CREATED", postId);
+        } else if (event.getClass().getSimpleName().equals("CommentNewEvent")) {
+            // 假设事件有 getCommentId() 方法
+            Long commentId = getCommentIdFromEvent(event);
+            publishMessage("COMMENT_ADDED", commentId);
         }
     }
 
@@ -39,5 +40,25 @@ public class HaloEventListener implements ApplicationListener<ApplicationEvent> 
         message.put("id", id.toString());
 
         redisTemplate.opsForStream().add(STREAM_KEY, message);
+    }
+
+    // 从事件中获取 postId，具体实现依赖于事件类的结构
+    private Long getPostIdFromEvent(ApplicationEvent event) {
+        try {
+            return (Long) event.getClass().getMethod("getPostId").invoke(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // 从事件中获取 commentId，具体实现依赖于事件类的结构
+    private Long getCommentIdFromEvent(ApplicationEvent event) {
+        try {
+            return (Long) event.getClass().getMethod("getCommentId").invoke(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
