@@ -22,7 +22,7 @@ public class HaloEventListener implements HandlerInterceptor {
 
     private final String STREAM_KEY = "halo-stream";
 
-    @Override
+    // 拦截API请求，不使用 @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
         String method = request.getMethod();
@@ -53,6 +53,7 @@ public class HaloEventListener implements HandlerInterceptor {
         return true;
     }
 
+    // 提取ID
     private Long extractIdFromRequest(HttpServletRequest request) {
         String[] uriParts = request.getRequestURI().split("/");
         try {
@@ -63,6 +64,7 @@ public class HaloEventListener implements HandlerInterceptor {
         }
     }
 
+    // 发布消息到Redis Stream
     private void publishMessage(String action, Long id) {
         Map<String, Object> message = new HashMap<>();
         message.put("action", action);
