@@ -26,12 +26,13 @@ spec:
       formSchema:
         - $formkit: text
           label: host
-          name: endpoint
+          name: host
           validation: required
-        - $formkit: text
+        - $formkit: number
           label: port
-          name: endpoint
+          name: port
+          value: 6379
           validation: required
         - $formkit: text
           label: password
-          name: endpoint
+          name: password
