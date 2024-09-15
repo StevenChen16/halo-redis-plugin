@@ -1,12 +1,11 @@
 package com.stevenchen.redisplugin.subscriber;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import run.halo.app.extension.ConfigurableOptionService;
 
 import java.time.Duration;
 import java.util.List;
@@ -20,20 +19,13 @@ public class RedisStreamSubscriber implements InitializingBean {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
-    private ConfigurableOptionService optionService;
-
     private RestTemplate restTemplate = new RestTemplate();
 
     private final String STREAM_KEY = "halo-stream";
     private final String GROUP_NAME = "halo-group";
 
-    private String serverAddress;
-
     @Override
     public void afterPropertiesSet() {
-        // 获取服务器地址
-        serverAddress = optionService.get("server.address").orElse("http://localhost:8090");
         Executors.newSingleThreadExecutor().submit(this::subscribe);
     }
 
@@ -87,7 +79,7 @@ public class RedisStreamSubscriber implements InitializingBean {
 
     private void updatePostCache(Long postId) {
         // 使用 REST API 获取文章信息
-        String url = serverAddress + "/api/posts/" + postId;
+        String url = "http://localhost:8090/api/posts/" + postId;
         Map<String, Object> post = restTemplate.getForObject(url, Map.class);
         if (post != null) {
             // 更新缓存逻辑
@@ -96,7 +88,7 @@ public class RedisStreamSubscriber implements InitializingBean {
 
     private void updateCommentCache(Long commentId) {
         // 使用 REST API 获取评论信息
-        String url = serverAddress + "/api/comments/" + commentId;
+        String url = "http://localhost:8090/api/comments/" + commentId;
         Map<String, Object> comment = restTemplate.getForObject(url, Map.class);
         if (comment != null) {
             // 更新缓存逻辑

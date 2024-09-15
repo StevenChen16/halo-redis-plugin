@@ -8,6 +8,9 @@ import run.halo.app.extension.ConfigurableOptionService;
 @Component
 public class RedisPluginConfig {
 
+    @Autowired
+    private ConfigurableOptionService optionService;
+
     @Data
     public static class BasicConfig {
         private String host;
@@ -15,18 +18,11 @@ public class RedisPluginConfig {
         private String password;
     }
 
-    private BasicConfig config;
-
-    @Autowired
-    public RedisPluginConfig(ConfigurableOptionService optionService) {
+    public BasicConfig getRedisConfig() {
         BasicConfig config = new BasicConfig();
-        config.setHost(optionService.get(RedisPluginOptions.HOST).orElse("localhost"));
-        config.setPort(Integer.parseInt(optionService.get(RedisPluginOptions.PORT).orElse("6379")));
-        config.setPassword(optionService.get(RedisPluginOptions.PASSWORD).orElse(""));
-        this.config = config;
-    }
-
-    public BasicConfig getConfig() {
+        config.setHost(optionService.get("redis.host").orElse("localhost"));
+        config.setPort(Integer.parseInt(optionService.get("redis.port").orElse("6379")));
+        config.setPassword(optionService.get("redis.password").orElse(""));
         return config;
     }
 }
