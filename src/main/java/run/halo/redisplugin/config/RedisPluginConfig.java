@@ -1,28 +1,36 @@
 package com.stevenchen.redisplugin.config;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import run.halo.app.extension.ConfigurableOptionService;
 
 @Component
 public class RedisPluginConfig {
 
-    @Autowired
-    private ConfigurableOptionService optionService;
-
     @Data
     public static class BasicConfig {
-        private String host;
-        private int port;
-        private String password;
+        private String host = "localhost";  // 默认 Redis 主机
+        private int port = 6379;            // 默认 Redis 端口
+        private String password = "";       // 默认 Redis 密码
     }
 
-    public BasicConfig getRedisConfig() {
-        BasicConfig config = new BasicConfig();
-        config.setHost(optionService.get("redis.host").orElse("localhost"));
-        config.setPort(Integer.parseInt(optionService.get("redis.port").orElse("6379")));
-        config.setPassword(optionService.get("redis.password").orElse(""));
+    private BasicConfig config = new BasicConfig();
+
+    public BasicConfig getConfig() {
         return config;
+    }
+
+    // 手动设置 Redis 的 host
+    public void setHost(String host) {
+        config.setHost(host);
+    }
+
+    // 手动设置 Redis 的 port
+    public void setPort(int port) {
+        config.setPort(port);
+    }
+
+    // 手动设置 Redis 的 password
+    public void setPassword(String password) {
+        config.setPassword(password);
     }
 }

@@ -38,10 +38,10 @@ public class HaloEventListener implements ApplicationListener<ApplicationEvent> 
         Map<String, Object> message = new HashMap<>();
         message.put("action", action);
         message.put("id", id.toString());
-    
+
         // 添加调试日志，确保方法被调用
         System.out.println("Publishing message to Redis: action=" + action + ", id=" + id);
-    
+
         redisTemplate.opsForStream().add(STREAM_KEY, message);
     }
 
