@@ -25,7 +25,6 @@ public class HaloEventListener implements HandlerInterceptor {
     private final String STREAM_KEY = "halo-stream";
 
     // 拦截API请求
-    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
         String method = request.getMethod();
