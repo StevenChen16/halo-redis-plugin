@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration(proxyBeanMethods = false)
 public class WebConfig implements WebMvcConfigurer {
 
-    // 添加logger
     private static final Logger logger = LoggerFactory.getLogger(WebConfig.class);
 
     @Autowired
@@ -25,13 +24,12 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new HandlerInterceptor() {
 
-            @Override
+            // 移除 @Override
             public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
                 String requestURI = request.getRequestURI();
                 String method = request.getMethod();
 
-                // 添加日志记录
-                logger.info("拦截到请求: " + requestURI + " 方法: " + method);  
+                logger.info("拦截到请求: " + requestURI + " 方法: " + method);
 
                 Long id = extractIdFromRequest(request);
                 if (requestURI.contains("/posts") && method.equals("PUT")) {
@@ -41,7 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
                         haloEventListener.handleRequest("POST_UPDATED", id);
                     }
                 } else if (requestURI.contains("/posts") && method.equals("DELETE")) {
-                    logger.info("拦截到文章删除请求: " + id);  
+                    logger.info("拦截到文章删除请求: " + id);
                     haloEventListener.handleRequest("POST_DELETED", id);
                 } else if (requestURI.contains("/comments") && method.equals("POST")) {
                     haloEventListener.handleRequest("COMMENT_ADDED", id);
