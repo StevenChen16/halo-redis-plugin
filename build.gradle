@@ -20,7 +20,8 @@ dependencies {
     implementation platform('run.halo.tools.platform:plugin:2.19.0-SNAPSHOT')
 
     // Halo 核心 API，提供服务和实体
-    compileOnly 'run.halo.app:api'
+    // compileOnly 'run.halo.app:api'
+    implementation 'run.halo.app:api'
 
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
