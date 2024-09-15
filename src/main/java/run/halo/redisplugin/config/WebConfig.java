@@ -10,7 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)  // 添加 proxyBeanMethods = false
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
@@ -20,7 +20,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new HandlerInterceptor() {
 
-            // 注意：移除 @Override 注解
             public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
                 String requestURI = request.getRequestURI();
                 String method = request.getMethod();
