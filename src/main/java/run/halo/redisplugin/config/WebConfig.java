@@ -24,13 +24,14 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new HandlerInterceptor() {
 
-            // 移除 @Override
             public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+                logger.info("进入拦截器，方法: " + request.getMethod() + "，路径: " + request.getRequestURI());
+            
                 String requestURI = request.getRequestURI();
                 String method = request.getMethod();
-
-                logger.info("拦截到请求: " + requestURI + " 方法: " + method);
-
+            
+                logger.info("拦截到请求: " + requestURI + " 方法: " + method);  // 原来的日志
+            
                 Long id = extractIdFromRequest(request);
                 if (requestURI.contains("/posts") && method.equals("PUT")) {
                     if (requestURI.contains("/publish")) {
@@ -39,7 +40,7 @@ public class WebConfig implements WebMvcConfigurer {
                         haloEventListener.handleRequest("POST_UPDATED", id);
                     }
                 } else if (requestURI.contains("/posts") && method.equals("DELETE")) {
-                    logger.info("拦截到文章删除请求: " + id);
+                    logger.info("拦截到文章删除请求: " + id);  // 删除操作的日志
                     haloEventListener.handleRequest("POST_DELETED", id);
                 } else if (requestURI.contains("/comments") && method.equals("POST")) {
                     haloEventListener.handleRequest("COMMENT_ADDED", id);
@@ -47,7 +48,7 @@ public class WebConfig implements WebMvcConfigurer {
                     haloEventListener.handleRequest("COMMENT_DELETED", id);
                 }
                 return true;
-            }
+            }            
 
             private Long extractIdFromRequest(HttpServletRequest request) {
                 String[] uriParts = request.getRequestURI().split("/");
