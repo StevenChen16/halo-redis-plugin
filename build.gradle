@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id "com.github.node-gradle.node" version "7.0.2"
-    id "io.freefair.lombok" version "8.9.0"
+    id "io.freefair.lombok" version "8.0.1"
     id "run.halo.plugin.devtools" version "0.1.1"
 }
 
@@ -21,6 +21,9 @@ dependencies {
 
     // Halo 核心 API，提供服务和实体
     compileOnly 'run.halo.app:api'
+
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
     // Redis 相关的依赖
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
