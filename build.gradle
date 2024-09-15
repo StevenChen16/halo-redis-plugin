@@ -29,6 +29,8 @@ dependencies {
     // Redis 相关的依赖
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'io.lettuce:lettuce-core:6.3.2.RELEASE'
+    implementation 'org.springframework:spring-webmvc:5.3.10'
+
 
     implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
