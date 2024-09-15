@@ -1,0 +1,21 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: plugin-redis-settings
+spec:
+  forms:
+    - group: basic
+      label: 设置
+      formSchema:
+        - $formkit: text
+          label: host
+          name: host
+          validation: required
+        - $formkit: number
+          label: port
+          name: port
+          value: 6379
+          validation: required
+        - $formkit: text
+          label: password
+          name: password

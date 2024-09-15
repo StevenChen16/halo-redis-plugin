@@ -12,6 +12,7 @@ spec:
     name: Steven Chen
     website: https://stevenchen.site
   logo: logo.png
+  settingName: plugin-redis-settings
   homepage: https://github.com/StevenChen16/halo-redis-plugin
   repo: https://github.com/StevenChen16/halo-redis-plugin
   issues: https://github.com/StevenChen16/halo-redis-plugin/issues
