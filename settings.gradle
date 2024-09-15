@@ -3,5 +3,8 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 rootProject.name = 'Halo-Connection'
 
+// Include the Halo project as a build
+includeBuild '../halo' // 这里的路径是 halo 项目相对路径，确保路径是正确的

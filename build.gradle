@@ -35,8 +35,6 @@ dependencies {
     // 测试相关的依赖
     testImplementation 'run.halo.app:api'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    includeBuild '../halo'
 }
 
 
