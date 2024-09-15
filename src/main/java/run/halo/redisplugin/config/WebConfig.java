@@ -23,7 +23,9 @@ public class WebConfig implements WebMvcConfigurer {
             public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
                 String requestURI = request.getRequestURI();
                 String method = request.getMethod();
-
+            
+                logger.info("拦截到请求: " + requestURI + " 方法: " + method);  // 新增日志
+            
                 Long id = extractIdFromRequest(request);
                 if (requestURI.contains("/posts") && method.equals("PUT")) {
                     if (requestURI.contains("/publish")) {
@@ -32,14 +34,17 @@ public class WebConfig implements WebMvcConfigurer {
                         haloEventListener.handleRequest("POST_UPDATED", id);
                     }
                 } else if (requestURI.contains("/posts") && method.equals("DELETE")) {
+                    logger.info("拦截到文章删除请求: " + id);  // 新增日志
                     haloEventListener.handleRequest("POST_DELETED", id);
                 } else if (requestURI.contains("/comments") && method.equals("POST")) {
                     haloEventListener.handleRequest("COMMENT_ADDED", id);
                 } else if (requestURI.contains("/comments") && method.equals("DELETE")) {
                     haloEventListener.handleRequest("COMMENT_DELETED", id);
                 }
+            
                 return true;
             }
+            
 
             private Long extractIdFromRequest(HttpServletRequest request) {
                 String[] uriParts = request.getRequestURI().split("/");
