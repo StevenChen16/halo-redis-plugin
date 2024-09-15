@@ -20,3 +20,18 @@ spec:
   license:
     - name: "GPL-3.0"
       url: "https://github.com/halo-dev/plugin-starter/blob/main/LICENSE"
+  forms:
+    - group: basic
+      label: 设置
+      formSchema:
+        - $formkit: text
+          label: host
+          name: endpoint
+          validation: required
+        - $formkit: text
+          label: port
+          name: endpoint
+          validation: required
+        - $formkit: text
+          label: password
+          name: endpoint
