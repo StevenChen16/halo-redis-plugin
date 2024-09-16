@@ -8,6 +8,7 @@ metadata:
 spec:
   enabled: true
   requires: ">=2.11.0"
+  version: 1.0.1
   author:
     name: Steven Chen
     website: https://stevenchen.site

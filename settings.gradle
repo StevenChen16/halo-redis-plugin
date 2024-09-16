@@ -4,7 +4,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'Halo-Connection'
+rootProject.name = 'HaloConnection'
 
 // Include the Halo project as a build
 // includeBuild '../halo' // 这里的路径是 halo 项目相对路径，确保路径是正确的
