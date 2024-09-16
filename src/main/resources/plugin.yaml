@@ -17,7 +17,7 @@ spec:
   homepage: https://github.com/StevenChen16/halo-redis-plugin
   repo: https://github.com/StevenChen16/halo-redis-plugin
   issues: https://github.com/StevenChen16/halo-redis-plugin/issues
-  displayName: "多实例互联"
+  displayName: "HaloConnection"
   description: "通过Redis Stream将多实例进行连接"
   license:
     - name: "GPL-3.0"
