@@ -25,7 +25,13 @@ public class HaloEventListener {
         message.put("action", action);
         message.put("id", id != null ? id.toString() : "unknown");
 
-        logger.info("发布消息到Redis: action=" + action + ", id=" + id);
-        redisTemplate.opsForStream().add(STREAM_KEY, message);
+        logger.info("准备发布消息到Redis: action=" + action + ", id=" + id);
+        
+        try {
+            redisTemplate.opsForStream().add(STREAM_KEY, message);
+            logger.info("成功发布消息到Redis: action=" + action + ", id=" + id);
+        } catch (Exception e) {
+            logger.error("发布消息到Redis失败", e);
+        }
     }
 }
