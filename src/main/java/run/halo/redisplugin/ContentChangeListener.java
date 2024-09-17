@@ -7,7 +7,7 @@ import org.springframework.context.event.EventListener;
 import run.halo.app.event.post.PostUpdatedEvent;
 import run.halo.redisplugin.RedisMessagePublisher;
 
-@SLF4j
+@Slf4j
 public class ContentChangeListener {
 
     private static final Logger logger = LoggerFactory.getLogger(ContentChangeListener.class);
