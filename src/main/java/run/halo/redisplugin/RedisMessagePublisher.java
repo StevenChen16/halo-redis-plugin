@@ -1,4 +1,4 @@
-package com.example.redissync;
+package run.halo.redisplugin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

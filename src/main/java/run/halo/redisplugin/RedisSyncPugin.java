@@ -1,7 +1,8 @@
-package com.example.redissync;
+package run.halo.redisplugin;
 
 import org.springframework.context.annotation.Bean;
 import run.halo.app.plugin.BasePlugin;
+import run.halo.redisplugin.listener.ContentChangeListener;
 
 public class RedisSyncPlugin extends BasePlugin {
 
