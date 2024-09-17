@@ -37,6 +37,9 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
 
+    implementation 'org.springframework:spring-context:5.3.27' 
+    implementation 'org.springframework:spring-context-support:5.3.27'
+
     // 测试相关的依赖
     testImplementation 'run.halo.app:api'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
