@@ -2,7 +2,6 @@ package run.halo.redisplugin;
 
 import org.springframework.context.annotation.Bean;
 import run.halo.app.plugin.BasePlugin;
-import run.halo.redisplugin.listener.ContentChangeListener;
 
 public class RedisSyncPlugin extends BasePlugin {
 
@@ -10,6 +9,7 @@ public class RedisSyncPlugin extends BasePlugin {
     public void onStarted() {
         // 插件启动时的初始化操作
         System.out.println("RedisSyncPlugin has started.");
+        redisMessageSubscriber().subscribe("post_updated");
     }
 
     @Override
@@ -19,8 +19,8 @@ public class RedisSyncPlugin extends BasePlugin {
     }
 
     @Bean
-    public ContentChangeListener contentChangeListener() {
-        return new ContentChangeListener(redisMessagePublisher());
+    public RedisMessageSubscriber redisMessageSubscriber() {
+        return new RedisMessageSubscriber();
     }
 
     @Bean
