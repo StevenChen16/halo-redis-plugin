@@ -3,7 +3,8 @@ package run.halo.redisplugin;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisStreamCommands;
-import io.lettuce.core.models.stream.StreamMessage;
+import io.lettuce.core.StreamMessage;
+import io.lettuce.core.XReadArgs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,8 @@ public class RedisMessageSubscriber {
 
     public void subscribe(String streamKey) {
         while (true) {
-            List<StreamMessage<String, String>> messages = streamCommands.xreadgroup("groupName", "consumerName", io.lettuce.core.XReadArgs.StreamOffset.lastConsumed(streamKey));
+            List<StreamMessage<String, String>> messages = streamCommands.xreadgroup(
+                "groupName", "consumerName", XReadArgs.StreamOffset.lastConsumed(streamKey));
             for (StreamMessage<String, String> message : messages) {
                 logger.info("Received message from Redis stream {}: {}", streamKey, message);
             }
