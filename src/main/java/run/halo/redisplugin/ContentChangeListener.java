@@ -17,30 +17,10 @@ public class ContentChangeListener {
 
     @EventListener
     public void handlePostUpdatedEvent(PostUpdatedEvent event) {
-        String postName = getPostNameFromEvent(event);
+        String postName = event.getPostName(); // 确认此方法存在
         logger.info("Post updated: {}", postName);
 
         // 通过Redis发送消息
         redisMessagePublisher.publish("post_updated", postName);
-    }
-
-    private String getPostNameFromEvent(PostUpdatedEvent event) {
-        // 尝试通过反射获取 postName
-        try {
-            // 检查是否有 getPostName() 方法
-            return (String) event.getClass().getMethod("getPostName").invoke(event);
-        } catch (NoSuchMethodException e) {
-            // 如果没有，尝试通过 getPost() 方法获取 Post 对象，再获取名称
-            try {
-                Object post = event.getClass().getMethod("getPost").invoke(event);
-                return (String) post.getClass().getMethod("getName").invoke(post);
-            } catch (Exception ex) {
-                logger.error("无法获取 postName", ex);
-                return "unknown_post";
-            }
-        } catch (Exception e) {
-            logger.error("无法获取 postName", e);
-            return "unknown_post";
-        }
     }
 }

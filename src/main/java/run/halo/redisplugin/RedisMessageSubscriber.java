@@ -2,35 +2,54 @@ package run.halo.redisplugin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.connection.stream.MapRecord;
+import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.stream.StreamListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.time.Duration;
+import java.util.List;
 
 @Component
 public class RedisMessageSubscriber {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisMessageSubscriber.class);
     private final RedisTemplate<String, String> redisTemplate;
-    private StreamListener<String, MapRecord<String, String, String>> listener;
     private Thread listenerThread;
     private volatile boolean running = true;
+    private static final String STREAM_KEY = "post_updated";
+    private static final String GROUP_NAME = "halo_group";
+    private static final String CONSUMER_NAME = "halo_consumer";
 
     public RedisMessageSubscriber(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
-        this.listener = this::handleMessage;
     }
 
     @PostConstruct
     public void start() {
+        // 创建消费者组，如果已存在则忽略异常
+        try {
+            redisTemplate.opsForStream().createGroup(STREAM_KEY, GroupCreateOptions.noStream().groupName(GROUP_NAME));
+            logger.info("Created Redis stream group '{}'", GROUP_NAME);
+        } catch (Exception e) {
+            logger.warn("Redis stream group '{}' might already exist.", GROUP_NAME);
+        }
+
         listenerThread = new Thread(() -> {
             while (running) {
                 try {
-                    // 监听 "post_updated" 流
-                    redisTemplate.opsForStream().listen("post_updated", listener);
+                    ReadOffset readOffset = ReadOffset.lastConsumed();
+                    Consumer consumer = Consumer.from(GROUP_NAME, CONSUMER_NAME);
+                    StreamReadOptions options = StreamReadOptions.empty().count(1).block(Duration.ofSeconds(5));
+                    List<MapRecord<String, String, String>> messages = redisTemplate.opsForStream()
+                            .read(consumer, options, StreamOffset.create(STREAM_KEY, readOffset));
+
+                    if (messages != null && !messages.isEmpty()) {
+                        for (MapRecord<String, String, String> message : messages) {
+                            handleMessage(message);
+                        }
+                    }
                 } catch (Exception e) {
                     logger.error("Error while listening to Redis stream", e);
                     try {
