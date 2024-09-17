@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import run.halo.app.plugin.BasePlugin;
 import run.halo.redisplugin.listener.ContentChangeListener;
 
+@Configuration
+@EnableAsync
 public class RedisSyncPlugin extends BasePlugin {
 
     public void onStarted() {
