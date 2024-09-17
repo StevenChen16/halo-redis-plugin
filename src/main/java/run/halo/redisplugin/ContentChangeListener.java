@@ -22,6 +22,8 @@ public class ContentChangeListener {
         String postName = getPostNameFromEvent(event);
         logger.info("Post updated: {}", postName);
 
+        log.debug("Publishing post updated event to Redis stream: {}", postName);
+
         // 通过Redis发送消息
         redisMessagePublisher.publish("halo-stream", postName);
     }
