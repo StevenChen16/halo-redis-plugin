@@ -2,10 +2,12 @@ package run.halo.redisplugin.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import run.halo.app.event.post.PostUpdatedEvent;
 import run.halo.redisplugin.RedisMessagePublisher;
 
+@SLF4j
 public class ContentChangeListener {
 
     private static final Logger logger = LoggerFactory.getLogger(ContentChangeListener.class);
