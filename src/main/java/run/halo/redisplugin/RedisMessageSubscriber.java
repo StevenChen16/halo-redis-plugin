@@ -15,8 +15,9 @@ public class RedisMessageSubscriber {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisMessageSubscriber.class);
     private final RedisTemplate<String, String> redisTemplate;
-    private final StreamListener<String, MapRecord<String, String, String>> listener;
+    private StreamListener<String, MapRecord<String, String, String>> listener;
     private Thread listenerThread;
+    private volatile boolean running = true;
 
     public RedisMessageSubscriber(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -26,7 +27,19 @@ public class RedisMessageSubscriber {
     @PostConstruct
     public void start() {
         listenerThread = new Thread(() -> {
-            redisTemplate.opsForStream().listen("post_updated", listener);
+            while (running) {
+                try {
+                    // 监听 "post_updated" 流
+                    redisTemplate.opsForStream().listen("post_updated", listener);
+                } catch (Exception e) {
+                    logger.error("Error while listening to Redis stream", e);
+                    try {
+                        Thread.sleep(1000); // 等待一秒后重试
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
         });
         listenerThread.start();
         logger.info("RedisMessageSubscriber started.");
@@ -34,6 +47,7 @@ public class RedisMessageSubscriber {
 
     @PreDestroy
     public void stop() {
+        running = false;
         if (listenerThread != null && listenerThread.isAlive()) {
             listenerThread.interrupt();
         }
