@@ -17,11 +17,13 @@ public class ContentChangeListener {
 
     @EventListener
     public void handlePostUpdatedEvent(PostUpdatedEvent event) {
+        logger.info("Received PostUpdatedEvent: {}", event);
+        
         String postName = getPostNameFromEvent(event);
         logger.info("Post updated: {}", postName);
 
-        // 通过 Redis 发送消息
-        redisMessagePublisher.publish("post_updated", postName);
+        // 通过Redis发送消息
+        redisMessagePublisher.publish("halo-stream", postName);
     }
 
     private String getPostNameFromEvent(PostUpdatedEvent event) {

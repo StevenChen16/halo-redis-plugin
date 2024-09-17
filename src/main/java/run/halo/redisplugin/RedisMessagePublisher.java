@@ -36,9 +36,14 @@ public class RedisMessagePublisher {
     }
 
     public void publish(String streamKey, String message) {
-        Map<String, String> content = new HashMap<>();
-        content.put("message", message);
-        commands.xadd(streamKey, content);
-        logger.info("Published message to Redis stream {}: {}", streamKey, message);
+        try {
+            Map<String, String> content = new HashMap<>();
+            content.put("message", message);
+            commands.xadd(streamKey, content);
+            logger.info("Published message to Redis stream {}: {}", streamKey, message);
+        } catch (Exception e) {
+            logger.error("Failed to publish message to Redis stream", e);
+        }
     }
+    
 }
