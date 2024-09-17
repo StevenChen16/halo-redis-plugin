@@ -20,7 +20,7 @@ public class ContentChangeListener {
         String postName = getPostNameFromEvent(event);
         logger.info("Post updated: {}", postName);
 
-        // 通过Redis发送消息
+        // 通过 Redis 发送消息
         redisMessagePublisher.publish("post_updated", postName);
     }
 

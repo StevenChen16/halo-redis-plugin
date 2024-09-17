@@ -2,7 +2,7 @@ package run.halo.redisplugin;
 
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
-import io.lettuce.core.api.sync.RedisStreamCommands;
+import io.lettuce.core.api.sync.RedisCommands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,13 +18,13 @@ public class RedisMessagePublisher {
     private static final Logger logger = LoggerFactory.getLogger(RedisMessagePublisher.class);
     private RedisClient redisClient;
     private StatefulRedisConnection<String, String> connection;
-    private RedisStreamCommands<String, String> streamCommands;
+    private RedisCommands<String, String> commands;
 
     @PostConstruct
     public void init() {
         redisClient = RedisClient.create("redis://localhost:6379");  // 默认连接到 localhost:6379
         connection = redisClient.connect();
-        streamCommands = connection.sync();  // 获取同步命令接口
+        commands = connection.sync();  // 获取同步命令接口
         logger.info("Lettuce Redis client initialized.");
     }
 
@@ -38,7 +38,7 @@ public class RedisMessagePublisher {
     public void publish(String streamKey, String message) {
         Map<String, String> content = new HashMap<>();
         content.put("message", message);
-        streamCommands.xadd(streamKey, content);
+        commands.xadd(streamKey, content);
         logger.info("Published message to Redis stream {}: {}", streamKey, message);
     }
 }
